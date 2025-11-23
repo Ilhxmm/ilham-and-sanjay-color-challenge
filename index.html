@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ilham & Sanjay Color Challenge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+            color: #e0e0ff;
+        }
+        
+        .game-container {
+            background: rgba(15, 15, 35, 0.92);
+            border-radius: 24px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            width: 100%;
+            max-width: 580px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(100, 150, 255, 0.2);
+        }
+        
+        .header {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.6rem;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #00a8ff, #ff6b9c, #7afcff, #ff7eb3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 300% 300%;
+            animation: gradientShift 8s ease infinite;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 10px rgba(122, 252, 255, 0.2);
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .subtitle {
+            color: #a0b0ff;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .names {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 15px 0;
+        }
+        
+        .name-badge {
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(0, 168, 255, 0.3);
+            animation: float 3s ease-in-out infinite;
+            color: white;
+        }
+        
+        .name-badge.ilham {
+            background: linear-gradient(45deg, #00a8ff, #00d2ff);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .name-badge.sanjay {
+            background: linear-gradient(45deg, #ff6b9c, #ff7eb3);
+            box-shadow: 0 4px 10px rgba(255, 107, 156, 0.3);
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .mode-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            background: rgba(40, 40, 70, 0.6);
+            color: #d0d0ff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(100, 120, 200, 0.3);
+            flex: 1;
+            min-width: 140px;
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(45deg, #00a8ff, #00d2ff);
+            color: white;
+            border-color: #00a8ff;
+            box-shadow: 0 5px 15px rgba(0, 168, 255, 0.4);
+        }
+        
+        .mode-btn.active.word {
+            background: linear-gradient(45deg, #ff6b9c, #ff7eb3);
+            border-color: #ff6b9c;
+            box-shadow: 0 5px 15px rgba(255, 107, 156, 0.4);
+        }
+        
+        .mode-btn:hover {
+            transform: translateY(-3px);
+            background: rgba(50, 50, 80, 0.7);
+        }
+        
+        .instructions-box {
+            background: rgba(25, 25, 50, 0.7);
+            padding: 18px;
+            border-radius: 16px;
+            margin: 20px 0;
+            color: #c0c0ff;
+            font-size: 1rem;
+            line-height: 1.6;
+            border: 2px solid rgba(100, 150, 255, 0.2);
+        }
+        
+        .keyboard-hint {
+            background: rgba(30, 30, 60, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #ffd166;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .key-hint {
+            background: rgba(50, 50, 100, 0.5);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            background: rgba(20, 20, 45, 0.7);
+            padding: 15px;
+            border-radius: 18px;
+            border: 2px solid rgba(100, 150, 255, 0.2);
+        }
+        
+        .stat-box {
+            color: #a0b0ff;
+            font-weight: 600;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #00a8ff;
+            margin-top: 5px;
+            text-shadow: 0 0 8px rgba(0, 168, 255, 0.3);
+        }
+        
+        .stat-value.word {
+            color: #ff6b9c;
+            text-shadow: 0 0 8px rgba(255, 107, 156, 0.3);
+        }
+        
+        .game-area {
+            position: relative;
+            height: 210px;
+            margin: 25px 0;
+            background: rgba(10, 10, 30, 0.7);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 3px dashed rgba(100, 150, 255, 0.2);
+        }
+        
+        .color-word {
+            font-size: 4.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+            min-height: 100px;
+            position: relative;
+        }
+        
+        .color-option {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            position: relative;
+            border: 3px solid rgba(200, 200, 255, 0.2);
+            transform: scale(0.95);
+        }
+        
+        .color-option:hover, .color-option.selected {
+            transform: scale(1.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            z-index: 2;
+            border-color: #ffd166;
+        }
+        
+        .color-option::after {
+            content: attr(data-color);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #e0e0ff;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            white-space: nowrap;
+        }
+        
+        .key-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border: 2px solid #ffd166;
+        }
+        
+        .timer-bar {
+            height: 12px;
+            background: rgba(40, 40, 70, 0.6);
+            border-radius: 6px;
+            margin: 25px 0;
+            overflow: hidden;
+            border: 2px solid rgba(100, 150, 255, 0.2);
+        }
+        
+        .timer-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #00a8ff, #00d2ff);
+            border-radius: 6px;
+            transition: width 0.1s linear;
+        }
+        
+        .timer-fill.word {
+            background: linear-gradient(90deg, #ff6b9c, #ff7eb3);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: none;
+            min-width: 140px;
+        }
+        
+        .btn.start {
+            background: linear-gradient(45deg, #00a8ff, #00d2ff);
+            color: white;
+            box-shadow: 0 6px 15px rgba(0, 168, 255, 0.4);
+        }
+        
+        .btn.pause {
+            background: linear-gradient(45deg, #ff6b9c, #ff7eb3);
+            color: white;
+            box-shadow: 0 6px 15px rgba(255, 107, 156, 0.4);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .btn.start:hover {
+            box-shadow: 0 8px 20px rgba(0, 168, 255, 0.6);
+        }
+        
+        .btn.pause:hover {
+            box-shadow: 0 8px 20px rgba(255, 107, 156, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 30, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            border-radius: 24px;
+        }
+        
+        .game-over.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .game-over h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            color: #00a8ff;
+            font-weight: 800;
+            text-shadow: 0 0 15px rgba(0, 168, 255, 0.4);
+        }
+        
+        .final-score {
+            color: #c0c0ff;
+            font-size: 1.8rem;
+            margin: 15px 0;
+            font-weight: 700;
+        }
+        
+        .final-score span {
+            color: #00a8ff;
+            font-weight: 800;
+        }
+        
+        .final-score.high {
+            color: #ff6b9c;
+        }
+        
+        .mode-display {
+            background: rgba(25, 25, 50, 0.7);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            color: #00a8ff;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            border: 2px solid rgba(100, 150, 255, 0.2);
+        }
+        
+        .mode-display.word {
+            color: #ff6b9c;
+            border-color: rgba(255, 107, 156, 0.3);
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+        
+        .high-score-display {
+            background: rgba(30, 30, 60, 0.7);
+            padding: 12px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-weight: 700;
+            color: #ffd166;
+            border-left: 4px solid #ffd166;
+        }
+        
+        .sound-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(40, 40, 70, 0.7);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: #a0d2eb;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .sound-toggle.muted {
+            color: #ff6b9c;
+        }
+        
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2rem; }
+            .color-word { font-size: 3.8rem; }
+            .color-option { width: 65px; height: 65px; }
+            .stats { flex-direction: column; gap: 12px; }
+            .names { flex-direction: column; align-items: center; gap: 10px; }
+            .mode-btn { min-width: 120px; padding: 10px 15px; font-size: 0.95rem; }
+            .btn { min-width: 120px; padding: 10px 15px; font-size: 1rem; }
+            .key-number { display: none; }
+            .keyboard-hint { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <button class="sound-toggle" id="sound-toggle">🔊</button>
+        
+        <div class="header">
+            <h1>Ilham & Sanjay Color Challenge</h1>
+            <div class="subtitle">A fun color matching game for everyone!</div>
+            
+            <div class="names">
+                <div class="name-badge ilham">Ilham</div>
+                <div class="name-badge sanjay">Sanjay</div>
+            </div>
+        </div>
+        
+        <div class="mode-selector">
+            <button class="mode-btn" id="text-color-mode">Text Color</button>
+            <button class="mode-btn" id="word-meaning-mode">Word Meaning</button>
+        </div>
+        
+        <div class="mode-display" id="mode-display">Mode: Match the TEXT COLOR</div>
+        
+        <div class="instructions-box" id="instructions">
+            <p><strong>Text Color Mode</strong>: Click the circle that matches the COLOR of the text.</p>
+            <p>Example: If "GREEN" appears in <span style="color: #ff9800; font-weight: bold">orange</span> text, click the ORANGE circle.</p>
+            <div class="keyboard-hint">
+                <span>Play with keys:</span>
+                <span class="key-hint">1</span>
+                <span class="key-hint">2</span>
+                <span class="key-hint">3</span>
+                <span class="key-hint">4</span>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div>Score</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat-box">
+                <div>Level</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+            <div class="stat-box">
+                <div>Best</div>
+                <div class="stat-value" id="best">0</div>
+            </div>
+        </div>
+        
+        <div class="high-score-display" id="high-score">High Score: 0</div>
+        
+        <div class="timer-bar">
+            <div class="timer-fill" id="timer-fill"></div>
+        </div>
+        
+        <div class="game-area">
+            <div class="color-word" id="color-word">RED</div>
+        </div>
+        
+        <div class="options" id="color-options"></div>
+        
+        <div class="controls">
+            <button class="btn start" id="start-btn">Start Game</button>
+            <button class="btn pause" id="pause-btn">Pause</button>
+        </div>
+        
+        <div class="game-over" id="game-over">
+            <h2>Game Over!</h2>
+            <div class="final-score">Your Score: <span id="final-score">0</span></div>
+            <div class="final-score">Level Reached: <span id="final-level">1</span></div>
+            <div class="final-score high">High Score: <span id="final-high-score">0</span></div>
+            <div class="mode-selector" style="margin: 25px 0;">
+                <button class="mode-btn" id="gameover-text-color">Text Color</button>
+                <button class="mode-btn" id="gameover-word-meaning">Word Meaning</button>
+            </div>
+            <button class="btn start" id="restart-btn">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Game elements
+        const soundToggle = document.getElementById('sound-toggle');
+        const scoreDisplay = document.getElementById('score');
+        const levelDisplay = document.getElementById('level');
+        const bestDisplay = document.getElementById('best');
+        const highScoreDisplay = document.getElementById('high-score');
+        const timerFill = document.getElementById('timer-fill');
+        const colorWord = document.getElementById('color-word');
+        const colorOptions = document.getElementById('color-options');
+        const startBtn = document.getElementById('start-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const gameOverScreen = document.getElementById('game-over');
+        const finalScore = document.getElementById('final-score');
+        const finalLevel = document.getElementById('final-level');
+        const finalHighScore = document.getElementById('final-high-score');
+        const restartBtn = document.getElementById('restart-btn');
+        const textColorModeBtn = document.getElementById('text-color-mode');
+        const wordMeaningModeBtn = document.getElementById('word-meaning-mode');
+        const modeDisplay = document.getElementById('mode-display');
+        const instructions = document.getElementById('instructions');
+        
+        // Game over mode buttons
+        const gameoverTextColorBtn = document.getElementById('gameover-text-color');
+        const gameoverWordMeaningBtn = document.getElementById('gameover-word-meaning');
+        
+        // Sound variables
+        let soundEnabled = true;
+        let audioContext;
+        
+        // Simple, common colors that everyone knows
+        const colors = ['Red', 'Blue', 'Green', 'Yellow', 'Orange', 'Pink', 'Purple', 'Black', 'White', 'Brown', 'Gray', 'Cyan'];
+        
+        const colorValues = {
+            'Red': '#f44336',
+            'Blue': '#2196f3',
+            'Green': '#4caf50',
+            'Yellow': '#ffeb3b',
+            'Orange': '#ff9800',
+            'Pink': '#e91e63',
+            'Purple': '#9c27b0',
+            'Black': '#222222',
+            'White': '#ffffff',
+            'Brown': '#795548',
+            'Gray': '#9e9e9e',
+            'Cyan': '#00bcd4'
+        };
+        
+        // Game variables
+        let score = 0;
+        let level = 1;
+        let bestScore = localStorage.getItem('bestScore') || 0;
+        let highScore = localStorage.getItem('highScore') || 0;
+        let gameActive = false;
+        let gamePaused = false;
+        let timer;
+        let timeLeft = 100;
+        // Load saved mode from localStorage, default to 'text-color'
+        let currentMode = localStorage.getItem('gameMode') || 'text-color';
+        let savedTimeLeft = 100;
+        let savedTimerInterval;
+        let currentOptions = [];
+        
+        // Update displays
+        bestDisplay.textContent = bestScore;
+        highScoreDisplay.textContent = `High Score: ${highScore}`;
+        
+        // Initialize Web Audio API
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.log("Web Audio API not supported");
+                soundEnabled = false;
+                soundToggle.textContent = '🔇';
+                soundToggle.classList.add('muted');
+            }
+        }
+        
+        // Play sound function
+        function playSound(frequency, duration, type = 'sine', volume = 0.3) {
+            if (!soundEnabled || !audioContext) return;
+            
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = type;
+                oscillator.frequency.value = frequency;
+                gainNode.gain.value = volume;
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                const now = audioContext.currentTime;
+                oscillator.start(now);
+                oscillator.stop(now + duration / 1000);
+                
+                // Clean up
+                oscillator.onended = () => {
+                    oscillator.disconnect();
+                    gainNode.disconnect();
+                };
+            } catch (e) {
+                console.log("Error playing sound:", e);
+            }
+        }
+        
+        // Sound effects
+        function playCorrectSound() {
+            playSound(523.25, 200, 'sine', 0.2); // C5 note
+            setTimeout(() => playSound(659.25, 200, 'sine', 0.2), 50); // E5 note
+        }
+        
+        function playWrongSound() {
+            playSound(220, 300, 'sawtooth', 0.3); // A3 note (lower)
+            setTimeout(() => playSound(174.61, 300, 'sawtooth', 0.3), 100); // F3 note
+        }
+        
+        function playLevelUpSound() {
+            playSound(783.99, 150, 'sine', 0.25); // G5
+            setTimeout(() => playSound(880, 150, 'sine', 0.25), 50); // A5
+            setTimeout(() => playSound(987.77, 150, 'sine', 0.25), 100); // B5
+        }
+        
+        function playGameStartSound() {
+            playSound(392, 200, 'sine', 0.2); // G4
+            setTimeout(() => playSound(523.25, 200, 'sine', 0.2), 100); // C5
+            setTimeout(() => playSound(659.25, 200, 'sine', 0.2), 200); // E5
+        }
+        
+        function playGameOverSound() {
+            playSound(130.81, 400, 'sine', 0.3); // C3
+            setTimeout(() => playSound(116.54, 400, 'sine', 0.3), 200); // B2
+            setTimeout(() => playSound(103.83, 400, 'sine', 0.3), 400); // A#2
+        }
+        
+        function playTimerWarningSound() {
+            playSound(349.23, 100, 'square', 0.15); // F4
+        }
+        
+        // Sound toggle
+        soundToggle.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            if (soundEnabled) {
+                soundToggle.textContent = '🔊';
+                soundToggle.classList.remove('muted');
+                // Resume audio context if needed
+                if (audioContext && audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+            } else {
+                soundToggle.textContent = '🔇';
+                soundToggle.classList.add('muted');
+            }
+        });
+        
+        // Initialize mode buttons based on saved mode
+        function initializeModeButtons() {
+            if (currentMode === 'text-color') {
+                textColorModeBtn.classList.add('active');
+                wordMeaningModeBtn.classList.remove('active');
+                gameoverTextColorBtn.classList.add('active');
+                gameoverWordMeaningBtn.classList.remove('active');
+            } else {
+                wordMeaningModeBtn.classList.add('active');
+                textColorModeBtn.classList.remove('active');
+                gameoverWordMeaningBtn.classList.add('active');
+                gameoverTextColorBtn.classList.remove('active');
+            }
+            updateModeUI();
+        }
+        
+        // Mode selection for main game
+        textColorModeBtn.addEventListener('click', () => {
+            currentMode = 'text-color';
+            localStorage.setItem('gameMode', currentMode);
+            initializeModeButtons();
+        });
+        
+        wordMeaningModeBtn.addEventListener('click', () => {
+            currentMode = 'word-meaning';
+            localStorage.setItem('gameMode', currentMode);
+            initializeModeButtons();
+        });
+        
+        // Mode selection for game over screen
+        gameoverTextColorBtn.addEventListener('click', () => {
+            currentMode = 'text-color';
+            localStorage.setItem('gameMode', currentMode);
+            initializeModeButtons();
+        });
+        
+        gameoverWordMeaningBtn.addEventListener('click', () => {
+            currentMode = 'word-meaning';
+            localStorage.setItem('gameMode', currentMode);
+            initializeModeButtons();
+        });
+        
+        // Pause button functionality
+        pauseBtn.addEventListener('click', togglePause);
+        
+        function togglePause() {
+            if (!gameActive) return;
+            
+            if (gamePaused) {
+                // Resume game
+                gamePaused = false;
+                timeLeft = savedTimeLeft;
+                timerFill.style.width = timeLeft + '%';
+                startTimer();
+                pauseBtn.textContent = 'Pause';
+                
+                if (soundEnabled && audioContext && audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+            } else {
+                // Pause game
+                gamePaused = true;
+                savedTimeLeft = timeLeft;
+                clearInterval(timer);
+                pauseBtn.textContent = 'Resume';
+            }
+        }
+        
+        function updateModeUI() {
+            // Update button states
+            if (currentMode === 'text-color') {
+                modeDisplay.textContent = 'Mode: Match the TEXT COLOR';
+                modeDisplay.className = 'mode-display';
+                instructions.innerHTML = '<p><strong>Text Color Mode</strong>: Click the circle that matches the COLOR of the text.</p><p>Example: If "GREEN" appears in <span style="color: #ff9800; font-weight: bold">orange</span> text, click the ORANGE circle.</p><div class="keyboard-hint"><span>Play with keys:</span><span class="key-hint">1</span><span class="key-hint">2</span><span class="key-hint">3</span><span class="key-hint">4</span></div>';
+                timerFill.className = 'timer-fill';
+            } else {
+                modeDisplay.textContent = 'Mode: Match the WORD MEANING';
+                modeDisplay.className = 'mode-display word';
+                instructions.innerHTML = '<p><strong>Word Meaning Mode</strong>: Click the circle that matches what the WORD says.</p><p>Example: If "GREEN" appears in <span style="color: #ff9800; font-weight: bold">orange</span> text, click the GREEN circle.</p><div class="keyboard-hint"><span>Play with keys:</span><span class="key-hint">1</span><span class="key-hint">2</span><span class="key-hint">3</span><span class="key-hint">4</span></div>';
+                timerFill.className = 'timer-fill word';
+            }
+        }
+        
+        // Initialize game
+        function initGame() {
+            score = 0;
+            level = 1;
+            timeLeft = 100;
+            gameActive = true;
+            gamePaused = false;
+            scoreDisplay.textContent = score;
+            levelDisplay.textContent = level;
+            timerFill.style.width = '100%';
+            startBtn.style.display = 'none';
+            gameOverScreen.classList.remove('show');
+            pauseBtn.textContent = 'Pause';
+            pauseBtn.disabled = false;
+            
+            // Play start sound
+            playGameStartSound();
+            
+            // Generate first challenge
+            generateChallenge();
+        }
+        
+        // Generate a new color-word challenge
+        function generateChallenge() {
+            // Clear previous options
+            colorOptions.innerHTML = '';
+            currentOptions = [];
+            
+            // Select the word to display
+            const wordColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Select a different color for the text (ink color)
+            let inkColors = colors.filter(color => color !== wordColor);
+            const inkColor = inkColors[Math.floor(Math.random() * inkColors.length)];
+            
+            // Set the text
+            colorWord.textContent = wordColor;
+            colorWord.style.color = colorValues[inkColor];
+            
+            // Determine the correct answer based on mode
+            let correctAnswer;
+            if (currentMode === 'text-color') {
+                correctAnswer = inkColor; // Match the text color
+            } else {
+                correctAnswer = wordColor; // Match the word meaning
+            }
+            
+            // Create 4 color options (including the correct one)
+            let options = [correctAnswer];
+            let otherColors = colors.filter(color => color !== correctAnswer);
+            
+            // Add 3 random wrong colors
+            for (let i = 0; i < 3; i++) {
+                let randomIndex = Math.floor(Math.random() * otherColors.length);
+                options.push(otherColors[randomIndex]);
+                otherColors.splice(randomIndex, 1);
+            }
+            
+            // Shuffle options
+            options.sort(() => Math.random() - 0.5);
+            currentOptions = [...options];
+            
+            // Create option buttons
+            options.forEach((color, index) => {
+                const option = document.createElement('div');
+                option.className = 'color-option';
+                option.style.backgroundColor = colorValues[color];
+                if (color === 'White' || color === 'Yellow') {
+                    option.style.border = '3px solid #555555';
+                }
+                option.dataset.color = color;
+                option.dataset.index = index;
+                option.addEventListener('click', checkAnswer);
+                colorOptions.appendChild(option);
+                
+                // Add key number indicator
+                const keyNumber = document.createElement('div');
+                keyNumber.className = 'key-number';
+                keyNumber.textContent = index + 1;
+                option.appendChild(keyNumber);
+            });
+            
+            // Start timer
+            startTimer();
+        }
+        
+        // Start the countdown timer
+        function startTimer() {
+            clearInterval(timer);
+            timeLeft = gamePaused ? savedTimeLeft : 100;
+            
+            timer = setInterval(() => {
+                if (gamePaused) return;
+                
+                timeLeft -= 2.5;
+                timerFill.style.width = timeLeft + '%';
+                
+                // Play warning sound when time is low
+                if (timeLeft <= 20 && timeLeft > 15) {
+                    playTimerWarningSound();
+                }
+                
+                if (timeLeft <= 0) {
+                    gameOver();
+                }
+            }, 60 - (level * 2.5));
+        }
+        
+        // Check if the selected color is correct based on mode
+        function checkAnswer(e) {
+            if (!gameActive || gamePaused) return;
+            
+            const selectedColor = e.target.dataset.color;
+            let correctAnswer;
+            
+            if (currentMode === 'text-color') {
+                // Get the actual text color
+                correctAnswer = getColorNameFromHex(colorWord.style.color);
+            } else {
+                // Get the word meaning
+                correctAnswer = colorWord.textContent;
+            }
+            
+            // Highlight selected option
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            e.target.classList.add('selected');
+            
+            if (selectedColor === correctAnswer) {
+                // Correct answer
+                playCorrectSound();
+                score += level * 10;
+                scoreDisplay.textContent = score;
+                
+                // Level up every 40 points
+                let leveledUp = false;
+                if (score >= level * 40 && level < 20) {
+                    level++;
+                    levelDisplay.textContent = level;
+                    leveledUp = true;
+                    // Play level up sound
+                    playLevelUpSound();
+                    // Update stat color based on mode
+                    if (currentMode === 'word-meaning') {
+                        levelDisplay.className = 'stat-value word';
+                        scoreDisplay.className = 'stat-value word';
+                    } else {
+                        levelDisplay.className = 'stat-value';
+                        scoreDisplay.className = 'stat-value';
+                    }
+                }
+                
+                // Update best score
+                if (score > bestScore) {
+                    bestScore = score;
+                    localStorage.setItem('bestScore', bestScore);
+                    bestDisplay.textContent = bestScore;
+                }
+                
+                // Update high score
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('highScore', highScore);
+                    highScoreDisplay.textContent = `High Score: ${highScore}`;
+                }
+                
+                // Generate next challenge
+                setTimeout(generateChallenge, 300);
+            } else {
+                // Wrong answer
+                playWrongSound();
+                gameOver();
+            }
+        }
+        
+        // Keyboard control handler
+        function handleKeyPress(event) {
+            if (!gameActive || gamePaused) return;
+            
+            const key = event.key;
+            if (key >= '1' && key <= '4') {
+                const index = parseInt(key) - 1;
+                if (index < currentOptions.length) {
+                    const selectedColor = currentOptions[index];
+                    let correctAnswer;
+                    
+                    if (currentMode === 'text-color') {
+                        correctAnswer = getColorNameFromHex(colorWord.style.color);
+                    } else {
+                        correctAnswer = colorWord.textContent;
+                    }
+                    
+                    // Highlight selected option
+                    document.querySelectorAll('.color-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    const selectedOption = document.querySelector(`.color-option[data-index="${index}"]`);
+                    if (selectedOption) {
+                        selectedOption.classList.add('selected');
+                    }
+                    
+                    if (selectedColor === correctAnswer) {
+                        // Correct answer
+                        playCorrectSound();
+                        score += level * 10;
+                        scoreDisplay.textContent = score;
+                        
+                        // Level up every 40 points
+                        let leveledUp = false;
+                        if (score >= level * 40 && level < 20) {
+                            level++;
+                            levelDisplay.textContent = level;
+                            leveledUp = true;
+                            // Play level up sound
+                            playLevelUpSound();
+                            // Update stat color based on mode
+                            if (currentMode === 'word-meaning') {
+                                levelDisplay.className = 'stat-value word';
+                                scoreDisplay.className = 'stat-value word';
+                            } else {
+                                levelDisplay.className = 'stat-value';
+                                scoreDisplay.className = 'stat-value';
+                            }
+                        }
+                        
+                        // Update best score
+                        if (score > bestScore) {
+                            bestScore = score;
+                            localStorage.setItem('bestScore', bestScore);
+                            bestDisplay.textContent = bestScore;
+                        }
+                        
+                        // Update high score
+                        if (score > highScore) {
+                            highScore = score;
+                            localStorage.setItem('highScore', highScore);
+                            highScoreDisplay.textContent = `High Score: ${highScore}`;
+                        }
+                        
+                        // Generate next challenge
+                        setTimeout(generateChallenge, 300);
+                    } else {
+                        // Wrong answer
+                        playWrongSound();
+                        gameOver();
+                    }
+                }
+            }
+        }
+        
+        // Helper function to get color name from hex
+        function getColorNameFromHex(hex) {
+            // Handle different formats (some browsers return rgb)
+            if (hex.startsWith('rgb')) {
+                // Convert rgb to hex
+                const match = hex.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+                if (match) {
+                    const r = parseInt(match[1]).toString(16).padStart(2, '0');
+                    const g = parseInt(match[2]).toString(16).padStart(2, '0');
+                    const b = parseInt(match[3]).toString(16).padStart(2, '0');
+                    hex = `#${r}${g}${b}`;
+                }
+            }
+            
+            // Find matching color name
+            for (const [name, value] of Object.entries(colorValues)) {
+                if (value.toLowerCase() === hex.toLowerCase()) {
+                    return name;
+                }
+            }
+            
+            // Fallback for white/black which might not have # in some browsers
+            if (hex === 'white' || hex === '#ffffff') return 'White';
+            if (hex === 'black' || hex === '#000000' || hex === '#222222') return 'Black';
+            
+            return null;
+        }
+        
+        // End the game
+        function gameOver() {
+            gameActive = false;
+            gamePaused = false;
+            clearInterval(timer);
+            finalScore.textContent = score;
+            finalLevel.textContent = level;
+            finalHighScore.textContent = highScore;
+            gameOverScreen.classList.add('show');
+            startBtn.style.display = 'block';
+            pauseBtn.disabled = true;
+            
+            // Play game over sound
+            playGameOverSound();
+            
+            // Initialize mode buttons for game over screen
+            initializeModeButtons();
+            
+            // Create confetti effect
+            createConfetti();
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#f44336', '#2196f3', '#4caf50', '#ffeb3b', '#ff9800', '#e91e63'];
+            const gameArea = document.querySelector('.game-container');
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.opacity = Math.random() * 0.8 + 0.2;
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                gameArea.appendChild(confetti);
+                
+                // Animate confetti
+                const animation = confetti.animate([
+                    { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+                    { transform: `translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 + 100}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+                ], {
+                    duration: 2000 + Math.random() * 3000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                });
+                
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+        
+        // Event listeners
+        startBtn.addEventListener('click', initGame);
+        restartBtn.addEventListener('click', initGame);
+        document.addEventListener('keydown', handleKeyPress);
+        
+        // Initialize scores from localStorage
+        bestDisplay.textContent = bestScore;
+        highScoreDisplay.textContent = `High Score: ${highScore}`;
+        
+        // Initialize audio
+        initAudio();
+        
+        // Initialize mode buttons on load
+        initializeModeButtons();
+    </script>
+</body>
+</html>
