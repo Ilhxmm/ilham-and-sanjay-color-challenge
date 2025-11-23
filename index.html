@@ -265,6 +265,11 @@
             white-space: nowrap;
         }
         
+        /* Hide color names in Word Meaning mode */
+        .word-meaning-mode .color-option::after {
+            display: none;
+        }
+        
         .key-number {
             position: absolute;
             top: -20px;
@@ -468,7 +473,7 @@
     </style>
 </head>
 <body>
-    <div class="game-container">
+    <div class="game-container" id="game-container">
         <button class="sound-toggle" id="sound-toggle">🔊</button>
         
         <div class="header">
@@ -547,6 +552,7 @@
 
     <script>
         // Game elements
+        const gameContainer = document.getElementById('game-container');
         const soundToggle = document.getElementById('sound-toggle');
         const scoreDisplay = document.getElementById('score');
         const levelDisplay = document.getElementById('level');
@@ -574,6 +580,7 @@
         // Sound variables
         let soundEnabled = true;
         let audioContext;
+        let soundBuffers = {};
         
         // Simple, common colors that everyone knows
         const colors = ['Red', 'Blue', 'Green', 'Yellow', 'Orange', 'Pink', 'Purple', 'Black', 'White', 'Brown', 'Gray', 'Cyan'];
@@ -613,9 +620,12 @@
         highScoreDisplay.textContent = `High Score: ${highScore}`;
         
         // Initialize Web Audio API
-        function initAudio() {
+        async function initAudio() {
             try {
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Create high-quality sound buffers
+                await createSoundBuffers();
             } catch (e) {
                 console.log("Web Audio API not supported");
                 soundEnabled = false;
@@ -624,30 +634,235 @@
             }
         }
         
-        // Play sound function
-        function playSound(frequency, duration, type = 'sine', volume = 0.3) {
-            if (!soundEnabled || !audioContext) return;
+        // Create high-quality sound buffers
+        async function createSoundBuffers() {
+            // Correct Answer Sound - Crystalline chime
+            soundBuffers.correct = createBellSound(880, 0.3, 0.6);
+            
+            // Wrong Answer Sound - Gentle error tone
+            soundBuffers.wrong = createErrorSound();
+            
+            // Level Up Sound - Ascending arpeggio
+            soundBuffers.levelUp = createLevelUpSound();
+            
+            // Game Start Sound - Bright, energetic sequence
+            soundBuffers.gameStart = createGameStartSound();
+            
+            // Game Over Sound - Gentle, melancholic
+            soundBuffers.gameOver = createGameOverSound();
+            
+            // Timer Warning Sound - Subtle alert
+            soundBuffers.timerWarning = createTimerWarningSound();
+        }
+        
+        // Create a beautiful bell-like sound
+        function createBellSound(frequency, duration, volume = 0.5) {
+            const sampleRate = audioContext.sampleRate;
+            const length = Math.floor(duration * sampleRate);
+            const buffer = audioContext.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            // Bell sound with multiple harmonics and exponential decay
+            for (let i = 0; i < length; i++) {
+                const t = i / sampleRate;
+                const decay = Math.exp(-t * 8);
+                const harmonic1 = Math.sin(2 * Math.PI * frequency * t) * decay;
+                const harmonic2 = Math.sin(2 * Math.PI * frequency * 1.5 * t) * decay * 0.6;
+                const harmonic3 = Math.sin(2 * Math.PI * frequency * 2.2 * t) * decay * 0.4;
+                const harmonic4 = Math.sin(2 * Math.PI * frequency * 3.1 * t) * decay * 0.3;
+                data[i] = (harmonic1 + harmonic2 + harmonic3 + harmonic4) * volume * 0.3;
+            }
+            
+            return buffer;
+        }
+        
+        // Create a gentle error sound
+        function createErrorSound() {
+            const sampleRate = audioContext.sampleRate;
+            const duration = 0.4;
+            const length = Math.floor(duration * sampleRate);
+            const buffer = audioContext.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            // Gentle descending tone with vibrato
+            for (let i = 0; i < length; i++) {
+                const t = i / sampleRate;
+                const frequency = 350 - (t / duration) * 150; // Descend from 350Hz to 200Hz
+                const vibrato = 1 + 0.2 * Math.sin(2 * Math.PI * 6 * t);
+                const decay = Math.exp(-t * 4);
+                data[i] = Math.sin(2 * Math.PI * frequency * vibrato * t) * decay * 0.4;
+            }
+            
+            return buffer;
+        }
+        
+        // Create an ascending level up sound
+        function createLevelUpSound() {
+            const sampleRate = audioContext.sampleRate;
+            const duration = 0.6;
+            const length = Math.floor(duration * sampleRate);
+            const buffer = audioContext.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            // Three ascending notes with bell-like quality
+            const note1End = Math.floor(0.15 * sampleRate);
+            const note2End = Math.floor(0.35 * sampleRate);
+            const note3End = length;
+            
+            for (let i = 0; i < length; i++) {
+                const t = i / sampleRate;
+                let amplitude = 0;
+                
+                if (i < note1End) {
+                    // First note: C5 (523.25Hz)
+                    const localT = t;
+                    const decay = Math.exp(-localT * 10);
+                    amplitude = Math.sin(2 * Math.PI * 523.25 * localT) * decay;
+                } else if (i < note2End) {
+                    // Second note: E5 (659.25Hz)
+                    const localT = t - 0.15;
+                    const decay = Math.exp(-localT * 10);
+                    amplitude = Math.sin(2 * Math.PI * 659.25 * localT) * decay;
+                } else {
+                    // Third note: G5 (783.99Hz)
+                    const localT = t - 0.35;
+                    const decay = Math.exp(-localT * 10);
+                    amplitude = Math.sin(2 * Math.PI * 783.99 * localT) * decay;
+                }
+                
+                data[i] = amplitude * 0.5;
+            }
+            
+            return buffer;
+        }
+        
+        // Create a bright game start sound
+        function createGameStartSound() {
+            const sampleRate = audioContext.sampleRate;
+            const duration = 0.8;
+            const length = Math.floor(duration * sampleRate);
+            const buffer = audioContext.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            // Three bright notes with reverb-like tail
+            const note1End = Math.floor(0.2 * sampleRate);
+            const note2End = Math.floor(0.45 * sampleRate);
+            const note3End = Math.floor(0.7 * sampleRate);
+            
+            for (let i = 0; i < length; i++) {
+                const t = i / sampleRate;
+                let amplitude = 0;
+                
+                if (i < note1End) {
+                    // G4 (392Hz)
+                    const localT = t;
+                    const decay = Math.exp(-localT * 6);
+                    amplitude = Math.sin(2 * Math.PI * 392 * localT) * decay;
+                } else if (i < note2End) {
+                    // C5 (523.25Hz)
+                    const localT = t - 0.2;
+                    const decay = Math.exp(-localT * 6);
+                    amplitude = Math.sin(2 * Math.PI * 523.25 * localT) * decay;
+                } else if (i < note3End) {
+                    // E5 (659.25Hz)
+                    const localT = t - 0.45;
+                    const decay = Math.exp(-localT * 6);
+                    amplitude = Math.sin(2 * Math.PI * 659.25 * localT) * decay;
+                } else {
+                    // Reverb tail
+                    const localT = t - 0.7;
+                    const decay = Math.exp(-localT * 12);
+                    amplitude = (Math.random() * 2 - 1) * decay * 0.1;
+                }
+                
+                data[i] = amplitude * 0.6;
+            }
+            
+            return buffer;
+        }
+        
+        // Create a gentle game over sound
+        function createGameOverSound() {
+            const sampleRate = audioContext.sampleRate;
+            const duration = 1.0;
+            const length = Math.floor(duration * sampleRate);
+            const buffer = audioContext.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            // Gentle descending chords
+            for (let i = 0; i < length; i++) {
+                const t = i / sampleRate;
+                const progress = t / duration;
+                const baseFreq = 130.81; // C3
+                
+                // Chord progression: C - Am - F - G
+                let freq1, freq2, freq3;
+                if (progress < 0.25) {
+                    // C major: C3, E3, G3
+                    freq1 = baseFreq;
+                    freq2 = baseFreq * 1.2599; // E
+                    freq3 = baseFreq * 1.4983; // G
+                } else if (progress < 0.5) {
+                    // A minor: A2, C3, E3
+                    freq1 = baseFreq * 0.8909; // A2
+                    freq2 = baseFreq;
+                    freq3 = baseFreq * 1.2599;
+                } else if (progress < 0.75) {
+                    // F major: F2, A2, C3
+                    freq1 = baseFreq * 0.75; // F2
+                    freq2 = baseFreq * 0.8909;
+                    freq3 = baseFreq;
+                } else {
+                    // G major: G2, B2, D3
+                    freq1 = baseFreq * 0.8333; // G2
+                    freq2 = baseFreq * 0.9439; // B2
+                    freq3 = baseFreq * 1.1225; // D3
+                }
+                
+                const decay = Math.exp(-t * 2);
+                const note1 = Math.sin(2 * Math.PI * freq1 * t) * decay;
+                const note2 = Math.sin(2 * Math.PI * freq2 * t) * decay * 0.7;
+                const note3 = Math.sin(2 * Math.PI * freq3 * t) * decay * 0.5;
+                
+                data[i] = (note1 + note2 + note3) * 0.4;
+            }
+            
+            return buffer;
+        }
+        
+        // Create a subtle timer warning sound
+        function createTimerWarningSound() {
+            const sampleRate = audioContext.sampleRate;
+            const duration = 0.15;
+            const length = Math.floor(duration * sampleRate);
+            const buffer = audioContext.createBuffer(1, length, sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            // Short, subtle alert
+            for (let i = 0; i < length; i++) {
+                const t = i / sampleRate;
+                const decay = Math.exp(-t * 20);
+                data[i] = Math.sin(2 * Math.PI * 880 * t) * decay * 0.2;
+            }
+            
+            return buffer;
+        }
+        
+        // Play sound from buffer
+        function playSoundFromBuffer(buffer, volume = 1) {
+            if (!soundEnabled || !audioContext || !buffer) return;
             
             try {
-                const oscillator = audioContext.createOscillator();
+                const source = audioContext.createBufferSource();
                 const gainNode = audioContext.createGain();
                 
-                oscillator.type = type;
-                oscillator.frequency.value = frequency;
+                source.buffer = buffer;
                 gainNode.gain.value = volume;
                 
-                oscillator.connect(gainNode);
+                source.connect(gainNode);
                 gainNode.connect(audioContext.destination);
                 
-                const now = audioContext.currentTime;
-                oscillator.start(now);
-                oscillator.stop(now + duration / 1000);
-                
-                // Clean up
-                oscillator.onended = () => {
-                    oscillator.disconnect();
-                    gainNode.disconnect();
-                };
+                source.start();
             } catch (e) {
                 console.log("Error playing sound:", e);
             }
@@ -655,35 +870,27 @@
         
         // Sound effects
         function playCorrectSound() {
-            playSound(523.25, 200, 'sine', 0.2); // C5 note
-            setTimeout(() => playSound(659.25, 200, 'sine', 0.2), 50); // E5 note
+            playSoundFromBuffer(soundBuffers.correct, 0.7);
         }
         
         function playWrongSound() {
-            playSound(220, 300, 'sawtooth', 0.3); // A3 note (lower)
-            setTimeout(() => playSound(174.61, 300, 'sawtooth', 0.3), 100); // F3 note
+            playSoundFromBuffer(soundBuffers.wrong, 0.8);
         }
         
         function playLevelUpSound() {
-            playSound(783.99, 150, 'sine', 0.25); // G5
-            setTimeout(() => playSound(880, 150, 'sine', 0.25), 50); // A5
-            setTimeout(() => playSound(987.77, 150, 'sine', 0.25), 100); // B5
+            playSoundFromBuffer(soundBuffers.levelUp, 0.9);
         }
         
         function playGameStartSound() {
-            playSound(392, 200, 'sine', 0.2); // G4
-            setTimeout(() => playSound(523.25, 200, 'sine', 0.2), 100); // C5
-            setTimeout(() => playSound(659.25, 200, 'sine', 0.2), 200); // E5
+            playSoundFromBuffer(soundBuffers.gameStart, 1.0);
         }
         
         function playGameOverSound() {
-            playSound(130.81, 400, 'sine', 0.3); // C3
-            setTimeout(() => playSound(116.54, 400, 'sine', 0.3), 200); // B2
-            setTimeout(() => playSound(103.83, 400, 'sine', 0.3), 400); // A#2
+            playSoundFromBuffer(soundBuffers.gameOver, 0.8);
         }
         
         function playTimerWarningSound() {
-            playSound(349.23, 100, 'square', 0.15); // F4
+            playSoundFromBuffer(soundBuffers.timerWarning, 0.9);
         }
         
         // Sound toggle
@@ -709,11 +916,13 @@
                 wordMeaningModeBtn.classList.remove('active');
                 gameoverTextColorBtn.classList.add('active');
                 gameoverWordMeaningBtn.classList.remove('active');
+                gameContainer.classList.remove('word-meaning-mode');
             } else {
                 wordMeaningModeBtn.classList.add('active');
                 textColorModeBtn.classList.remove('active');
                 gameoverWordMeaningBtn.classList.add('active');
                 gameoverTextColorBtn.classList.remove('active');
+                gameContainer.classList.add('word-meaning-mode');
             }
             updateModeUI();
         }
